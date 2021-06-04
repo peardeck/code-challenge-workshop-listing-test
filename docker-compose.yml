@@ -1,0 +1,51 @@
+version: "3"
+services:
+    frontend:
+        build: ./frontend
+        restart: always
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        depends_on:
+            - backend
+        networks:
+            - webappnetwork
+    backend:
+        build: ./backend
+        restart: always
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
+        depends_on:
+            - mongodb
+        networks:
+            - webappnetwork
+    mongodb:
+        image: mongo
+        restart: always
+        container_name: mongodb
+        environment:
+        - PUID=1000
+        - PGID=1000
+        volumes:
+            - ./data-node:/data/db
+        ports:
+            - 27017:27017
+        networks:
+            - webappnetwork
+    mongo_restore:
+        image: mongo
+        volumes:
+            - ./backend:/backend
+        command: mongorestore --host mongodb:27017 --db workshops_dev_db /backend/db-dump/
+        depends_on:
+            - mongodb
+        networks:
+            - webappnetwork
+networks:
+    webappnetwork:
+        driver: bridge

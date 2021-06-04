@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 30px;
+  padding: 10px;
+  color: white;
+  padding-right: 30px;
+}
+
+.hidden {
+  display: none;
+}
+
+form input[type=text],  form input[type=email], form input[type=password]{
+  text-align: center;
+}
+
+.error-msg {
+  padding: 20px;
+  border: 1px solid red;
+  color: red;
+}

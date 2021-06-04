@@ -1,0 +1,61 @@
+.hidden {
+  display: none;
+}
+.workshop-item {
+  display: inline-block;
+  height: 220px;
+  width: 220px;
+  margin: 20px;
+  padding-top: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.workshop-item:hover {
+  border-color:red;
+}
+
+.workshop-item .up {
+  height: 15%;
+}
+
+.workshop-item .up .title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.workshop-item .middle {
+  height: 150px;
+  width: 150px;
+  display: inline-block;
+}
+
+.workshop-item .down {
+  height: 20%;
+  padding-top: 10px;
+}
+
+.workshop-item .down .workshop-btn {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: none;
+  font-size: 16px;
+  margin: 5px;
+  padding: 5px;
+  width: 70px;
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.workshop-item .down .workshop-btn:hover {
+  border: 2px solid black;
+}
+
+.workshop-item .down .like-btn {
+  background-color: green;
+}
+
+.workshop-item .down .dislike-btn, .workshop-item .down .remove-btn {
+  background-color: red;
+}
