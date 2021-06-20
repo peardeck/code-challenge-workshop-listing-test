@@ -56,20 +56,19 @@ class WorkshopDisplay extends Component {
   }
 
   fetchWorkshops (url) {
-    let workshops = [];
     let isPreferred = !url.includes('nearby');
     fetch(url, {
       method: 'GET',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     .then ( (resp) =>  resp.json() )
-    .then ( (data) => {
-      console.log(data);
+    .then ( (res) => {
+      console.log(res);
       // data is a list of workshops
       // TODO-code-challenge: Core Functionality: As a User, I can display the list of workshops sorted by distance
-      // this.setState({
-      //   data: <div>List of workshops</div>
-      // })
+      this.setState({
+         data: res
+       })
     })
     .catch( (err) => {
       console.error(err);
@@ -110,13 +109,22 @@ class WorkshopDisplay extends Component {
   }
 
   render() {
+
     return (
       <div className="WorkshopDisplay">
         <div>
           <h1 className="title">Nearby Workshops</h1>
         </div>
         <div>
-          { this.state.data  }
+        {this.state.data.map((postData) => {
+        return (
+        <WorkshopItem key={postData._id}
+                      name={postData.name}
+                      img={postData.picture}
+                      id={postData._id} />
+        );
+        }
+        )}
         </div>
       </div>
     );
