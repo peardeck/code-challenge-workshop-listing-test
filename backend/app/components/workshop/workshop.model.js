@@ -14,8 +14,6 @@ const WorkshopSchema = new Schema({
   }
 });
 
-//WorkshopSchema.index({ location: "2dsphere"});
-
 const Workshop = mongoose.model('Workshop', WorkshopSchema);
 
 module.exports = Workshop;
