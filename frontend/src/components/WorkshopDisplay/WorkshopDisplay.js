@@ -116,12 +116,12 @@ class WorkshopDisplay extends Component {
           <h1 className="title">Nearby Workshops</h1>
         </div>
         <div>
-        {this.state.data.map((postData) => {
+        {this.state.data.map((workshop) => {
         return (
-        <WorkshopItem key={postData._id}
-                      name={postData.name}
-                      img={postData.picture}
-                      id={postData._id} />
+        <WorkshopItem key={workshop._id}
+                      name={workshop.name}
+                      img={workshop.picture}
+                      id={workshop._id} />
         );
         }
         )}
