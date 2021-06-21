@@ -47,7 +47,7 @@ exports.getNearby = async (id, longitude, latitude) => {
     console.log(specialWorkshops);
     // If Liked || if Disliked less than two hours don't show'
     let updatedWorkshops = []
-    let currentTime = Date.now();
+    let currentTime = new Date();
     let millsec = (1000 * 60);
     let limit = 120;
     let skip = false;
@@ -56,10 +56,10 @@ exports.getNearby = async (id, longitude, latitude) => {
         if (workshops[i]._id.toString() === sp.workshopId.toString()) {
           if (sp.likedTime) {
             // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
-            skip = ((sp.likedTime - currentTime)/millsec) >= limit;
+            skip = ((currentTime - new Date(sp.likedTime))/millsec) <= limit;
           } else if (sp.dislikedTime) {
             // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
-            skip = ((sp.dislikedTime - currentTime)/millsec) >= limit;
+            skip = ((currentTime - new Date(sp.dislikedTime))/millsec) <= limit;
           }
         }
       }
@@ -83,14 +83,14 @@ exports.getPreferred = async (id) => {
     // Get Special workshops ( liked & disliked )
     let likedWorkshops = await userService.getLikedWorkshops(id);
 
-    // If Liked in less than two hours show'
+    // If Liked in less than two hours show in preferred list'
     let updatedWorkshops = []
     let currentTime = Date.now();
     let millsec = (1000 * 60);
     for (let i = 0 ; i < workshops.length ; i++) {
       for (let lw of likedWorkshops) {
         if (workshops[i]._id.toString() === lw.workshopId.toString()) {
-          if (((lw.likedTime - currentTime)/millsec) < 120) {
+          if (((currentTime - new Date(lw.likedTime))/millsec) < 120) {
                   updatedWorkshops.push(workshops[i]);
           }
         }
