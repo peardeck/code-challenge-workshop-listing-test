@@ -124,10 +124,8 @@ class WorkshopDisplay extends Component {
                         name={workshop.name}
                         img={workshop.picture}
                         id={workshop._id}
-                        preferred={this.pathNameToTitle()}/>
-          );
-          }
-          )}
+                        preferred={this.pathNameToTitle() === "Preferred Workshops"}/>);
+          })}
           </div>
       </div>
     );

@@ -56,9 +56,9 @@ exports.likeWorkshop = async (idUser, workshop) => {
   winston.debug(`User Service : User liked workshop ${workshop.name} by user ${idUser}`);
   try {
     let user = await User.findById(idUser);
-    let likedWorkshop = { workshopId: workshop, likedTime:Date.now() };
+    let likedWorkshop = { workshopId: workshop, likedTime: Date.now() };
 
-    user.likedWorkshops.push(likedWorkshop);
+    user.likedWorkshops.addToSet(likedWorkshop);
     await user.save();
     return true;
   } catch (err) {
@@ -97,7 +97,7 @@ winston.debug(`User Service : User disliked workshop ${workshop.name} by user ${
     let user = await User.findById(idUser);
     let dislikedWorkshop = { workshopId: workshop, dislikedTime:Date.now() };
 
-    user.dislikedWorkshops.push(dislikedWorkshop);
+    user.dislikedWorkshops.addToSet(dislikedWorkshop);
     await user.save();
     return true;
   } catch (err) {

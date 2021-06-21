@@ -15,7 +15,6 @@ class WorkshopItem extends Component {
       .then ( (resp) => {
         if (resp.status === 200) {
           console.log ('Workshop Item added to preferred workshops !');
-          this.props.selfUnmount(this.props.id);
         }
         else {
           console.log(`Status returned ${resp.status}`); }
@@ -34,7 +33,6 @@ class WorkshopItem extends Component {
           .then ( (resp) => {
             if (resp.status === 200) {
               console.log ('Workshop Item added to disliked list');
-              this.props.selfUnmount(this.props.id);
             }
             else {
               console.log(`Status returned ${resp.status}`); }
@@ -53,7 +51,6 @@ class WorkshopItem extends Component {
               .then ( (resp) => {
                 if (resp.status === 200) {
                   console.log ('Workshop Item removed from preferred workshops list');
-                  this.props.selfUnmount(this.props.id);
                 }
                 else {
                   console.log(`Status returned ${resp.status}`); }
@@ -74,11 +71,11 @@ class WorkshopItem extends Component {
             <img className="workshop-img" src={this.props.img} alt="" />
           </div>
           <div className="down">
-            <div className={this.props.preferred === "Preferred Workshops" ? "hidden": ""}>
+            <div className={this.props.preferred ? "hidden": ""}>
               <button className="workshop-btn dislike-btn" onClick={this.dislikeClickHandler.bind(this)}>Dislike</button>
               <button className="workshop-btn like-btn" onClick={this.likeClickHandler.bind(this)}>Like</button>
             </div>
-            <div className={this.props.preferred === "Preferred Workshops" ? "": "hidden"}>
+            <div className={this.props.preferred ? "": "hidden"}>
               <button className="workshop-btn remove-btn" onClick={this.removeClickHandler.bind(this)}>Remove</button>
             </div>
           </div>
