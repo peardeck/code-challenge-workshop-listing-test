@@ -55,11 +55,11 @@ exports.getNearby = async (id, longitude, latitude) => {
       for (let sp of specialWorkshops) {
         if (workshops[i]._id.toString() === sp.workshopId.toString()) {
           if (sp.likedTime) {
-            skip = ((sp.likedTime - currentTime)/millsec) >= limit ? false: true;
+            skip = ((sp.likedTime - currentTime)/millsec) >= limit;
             // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
           } else if (sp.dislikedTime) {
             // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
-            skip = ((sp.dislikedTime - currentTime)/millsec) >= limit ? false : true;
+            skip = ((sp.dislikedTime - currentTime)/millsec) >= limit;
           }
         }
       }
