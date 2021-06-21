@@ -40,11 +40,11 @@ class Register extends Component {
     let email = this.state.email;
     let password = this.state.password;
 
-    if (password.length < 8) {
-      this.passwordInput.value = "";
-      this.passwordInput.focus();
-      return;
-    }
+   if (password.length < 8) {
+         this.setState({ password : ""});
+         document.getElementById('password').focus();
+          return;
+   }
 
     let payload = JSON.stringify({ name: name, email: email, password: password });
     fetch ('http://localhost:3000/api/v1/users/sign-up/', {
@@ -90,7 +90,7 @@ class Register extends Component {
             </div>
             <div className="field">
               <label htmlFor="password">Password: </label>
-              <input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} required placeholder="( at lease 8 characters )"/>
+              <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleInputChange} required placeholder="( at lease 8 characters )"/>
             </div>
             <div className="field">
               <button type="submit">Sign-up</button>
