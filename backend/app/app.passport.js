@@ -12,7 +12,7 @@ module.exports = (passport) => {
   passport.use(new LocalStrategy({usernameField: 'email'}, (username, password, done) => {
     User.findOne({email: username}, (err, user) => {
       if (err) {
-        winston.error(`Error Passport LocalStrategy authenticating user with email ${email}`)
+        winston.error(`Error Passport LocalStrategy authenticating user with email ${username}`)
         return done(err);
       } else if (!user) {
         winston.debug(`User with email ${username} not found in DB`);

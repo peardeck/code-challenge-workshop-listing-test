@@ -34,11 +34,11 @@ class WorkshopDisplay extends Component {
     this.stopHistoryUnlisten();
   }
 
-  pathNameToTitle () {
+ pathNameToTitle () {
     if (this.props.location.pathname.includes('nearby')) {
-      return "Nearby"
+      return "Nearby Workshops"
     } else if (this.props.location.pathname.includes('preferred')) {
-      return "Preferred";
+      return "Preferred Workshops";
     } else {
       return "";
     }
@@ -56,7 +56,6 @@ class WorkshopDisplay extends Component {
   }
 
   fetchWorkshops (url) {
-    let isPreferred = !url.includes('nearby');
     fetch(url, {
       method: 'GET',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -103,6 +102,9 @@ class WorkshopDisplay extends Component {
 
     } else if (mode === '/workshops/preferred') {
       // TODO-code-challenge: Bonus: As a User, I can display the list of preferred workshops
+       console.log("Get Preferred Workshops");
+       url = `http://localhost:3000/api/v1/workshops/preferred`;
+       this.fetchWorkshops(url);
     } else {
       this.props.history.push('/workshops/nearby');
     }
@@ -113,19 +115,18 @@ class WorkshopDisplay extends Component {
     return (
       <div className="WorkshopDisplay">
         <div>
-          <h1 className="title">Nearby Workshops</h1>
+          <h1 className="title">{this.pathNameToTitle()}</h1>
         </div>
-        <div>
-        {this.state.data.map((workshop) => {
-        return (
-        <WorkshopItem key={workshop._id}
-                      name={workshop.name}
-                      img={workshop.picture}
-                      id={workshop._id} />
-        );
-        }
-        )}
-        </div>
+          <div>
+          {this.state.data.map((workshop) => {
+          return (
+          <WorkshopItem key={workshop._id}
+                        name={workshop.name}
+                        img={workshop.picture}
+                        id={workshop._id}
+                        preferred={this.pathNameToTitle() === "Preferred Workshops"}/>);
+          })}
+          </div>
       </div>
     );
   }

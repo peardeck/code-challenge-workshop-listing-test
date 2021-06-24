@@ -53,6 +53,19 @@ exports.getDislikedWorkshops = async (id) => {
 
 exports.likeWorkshop = async (idUser, workshop) => {
   // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
+  winston.debug(`User Service : User liked workshop ${workshop.name} by user ${idUser}`);
+  try {
+    let user = await User.findById(idUser);
+    let likedWorkshop = { workshopId: workshop, likedTime: Date.now() };
+
+    user.likedWorkshops.addToSet(likedWorkshop);
+    await user.save();
+    return true;
+  } catch (err) {
+    winston.error(`User Service: Error in liking the workshop ${idWorkshop} by user ${idUser}`);
+    winston.debug(err);
+    return false;
+  }
 };
 
 exports.unlikeWorkshop = async (idUser, workshop) => {
@@ -79,4 +92,17 @@ exports.unlikeWorkshop = async (idUser, workshop) => {
 
 exports.dislikeWorkshop = async (idUser, workshop) => {
   // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
+winston.debug(`User Service : User disliked workshop ${workshop.name} by user ${idUser}`);
+  try {
+    let user = await User.findById(idUser);
+    let dislikedWorkshop = { workshopId: workshop, dislikedTime:Date.now() };
+
+    user.dislikedWorkshops.addToSet(dislikedWorkshop);
+    await user.save();
+    return true;
+  } catch (err) {
+    winston.error(`User Service: Error in disliking the workshop ${idWorkshop} by user ${idUser}`);
+    winston.debug(err);
+    return false;
+  }
 };
