@@ -10,9 +10,21 @@ class Login extends Component {
     super(props);
     this.state = {
       logged: false,
+      email: "",
+      password: "",
       error: ""
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
+  }
+
+  handleInputChange(event) {
+    let id = event.target.name;
+
+    this.setState({
+    [id]: event.target.value
+    });
   }
 
   componentWillMount() {
@@ -32,13 +44,13 @@ class Login extends Component {
 
     // @TODO-code-challenge: Core Functionality: As a User, I can sign in using my email & password
     // Update fields based on user input
-    let email = "";
-    let password = "";
+     let email = this.state.email;
+     let password = this.state.password;
 
     if (password.length < 8) {
-      this.passwordInput.value = "";
-      this.passwordInput.focus();
-      return;
+             this.setState({ password : ""});
+             document.getElementById('password').focus();
+              return;
     }
 
     let payload = JSON.stringify({ email: email, password: password });
@@ -84,11 +96,11 @@ class Login extends Component {
             {/* @TODO-code-challenge: Core Functionality: As a User, I can sign in using my email & password */}
             <div className="field">
               <label htmlFor="email">E-mail: </label>
-              <input type="email" name="email" required placeholder="valid e-mail"/>
+              <input type="email" name="email" value={this.state.email} onChange={this.handleInputChange} required placeholder="valid e-mail"/>
             </div>
             <div className="field">
               <label htmlFor="password">Password: </label>
-              <input type="password" name="password" required placeholder="( at least 8 characters )"/>
+              <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleInputChange} required placeholder="( at least 8 characters )"/>
             </div>
             <div className="field">
               <button type="submit">Sign-in</button>

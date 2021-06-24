@@ -9,12 +9,25 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: ""
+      error: "",
+      name: "",
+      email: "",
+      password: ""
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
   }
 
   componentWillMount() {
+  }
+
+ handleInputChange(event) {
+    let id = event.target.name;
+
+    this.setState({
+    [id]: event.target.value
+    });
   }
 
   submitHandler(ev) {
@@ -23,15 +36,15 @@ class Register extends Component {
 
     // @TODO-code-challenge: Core Functionality: As a User, I can sign up using my email & password
     // Update fields based on user input
-    let name = "";
-    let email = "";
-    let password = "";
+    let name = this.state.name;
+    let email = this.state.email;
+    let password = this.state.password;
 
-    if (password.length < 8) {
-      this.passwordInput.value = "";
-      this.passwordInput.focus();
-      return;
-    }
+   if (password.length < 8) {
+         this.setState({ password : ""});
+         document.getElementById('password').focus();
+          return;
+   }
 
     let payload = JSON.stringify({ name: name, email: email, password: password });
     fetch ('http://localhost:3000/api/v1/users/sign-up/', {
@@ -69,15 +82,15 @@ class Register extends Component {
             {/* // @TODO-code-challenge: Core Functionality: As a User, I can sign up using my email & password */}
             <div className="field">
               <label htmlFor="name">Names: </label>
-              <input type="text" name="name" required placeholder="name"/>
+              <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange} required placeholder="name"/>
             </div>
             <div className="field">
               <label htmlFor="email">E-mail: </label>
-              <input type="email" name="email" required placeholder="valid e-mail"/>
+              <input type="email" name="email" value={this.state.email} onChange={this.handleInputChange} required placeholder="valid e-mail"/>
             </div>
             <div className="field">
               <label htmlFor="password">Password: </label>
-              <input type="password" name="password" required placeholder="( at lease 8 characters )"/>
+              <input type="password" id="password" name="password" value={this.state.password} onChange={this.handleInputChange} required placeholder="( at lease 8 characters )"/>
             </div>
             <div className="field">
               <button type="submit">Sign-up</button>

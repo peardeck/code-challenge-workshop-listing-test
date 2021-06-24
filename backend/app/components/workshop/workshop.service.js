@@ -26,11 +26,16 @@ exports.getNearby = async (id, longitude, latitude) => {
     // If coordinates are not specified just get the workshops as they are from the DB
     let workshops;
     if (longitude && latitude) {
-      workshops = await Workshop.find(
-        // TODO-code-challenge: Core Functionality: As a User, I can display the list of workshops sorted by distance
-        // Could sort here in the find function based on longitude and latitude
-        // See mongoose $near
-      ).exec();
+      workshops = await Workshop.find({
+          location: {
+                $near: {
+                  $geometry: {
+                    type: "Point",
+                    coordinates: [longitude, latitude]
+                  }
+                }
+              }
+            }).exec();
     } else {
       workshops = await Workshop.find();
     }
@@ -40,21 +45,61 @@ exports.getNearby = async (id, longitude, latitude) => {
     let dislikedWorkshops = await userService.getDislikedWorkshops(id);
     let specialWorkshops = [...likedWorkshops, ...dislikedWorkshops];
     console.log(specialWorkshops);
-    // If Liked || if Disliked less than two hours don't show
+    // If Liked || if Disliked less than two hours don't show'
+    let updatedWorkshops = []
+    let currentTime = new Date();
+    let millsec = (1000 * 60);
+    let limit = 120;
+    let skip = false;
     for (let i = 0 ; i < workshops.length ; i++) {
       for (let sp of specialWorkshops) {
         if (workshops[i]._id.toString() === sp.workshopId.toString()) {
           if (sp.likedTime) {
             // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
+            skip = ((currentTime - new Date(sp.likedTime))/millsec) <= limit;
           } else if (sp.dislikedTime) {
             // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
+            skip = ((currentTime - new Date(sp.dislikedTime))/millsec) <= limit;
+          }
+        }
+      }
+      if(!skip) { updatedWorkshops.push(workshops[i]);}
+      skip = false;
+    }
+
+    return updatedWorkshops;
+  } catch (err) {
+    winston.error('Workshop service Error: could not get nearby workshops');
+    winston.debug(err);
+    return false;
+  }
+};
+
+exports.getPreferred = async (id) => {
+  try {
+    winston.debug('Workshop service getting preferred workshops');
+    // If coordinates are not specified just get the workshops as they are from the DB
+    let workshops = await Workshop.find();
+    // Get Special workshops ( liked & disliked )
+    let likedWorkshops = await userService.getLikedWorkshops(id);
+
+    // If Liked in less than two hours show in preferred list'
+    let updatedWorkshops = []
+    let currentTime = Date.now();
+    let millsec = (1000 * 60);
+    for (let i = 0 ; i < workshops.length ; i++) {
+      for (let lw of likedWorkshops) {
+        if (workshops[i]._id.toString() === lw.workshopId.toString()) {
+          if (((currentTime - new Date(lw.likedTime))/millsec) < 120) {
+                  updatedWorkshops.push(workshops[i]);
           }
         }
       }
     }
-    return workshops;
+
+    return updatedWorkshops;
   } catch (err) {
-    winston.error('Workshop service Error: could not get nearby workshops');
+    winston.error('Workshop service Error: could not get preferred workshops');
     winston.debug(err);
     return false;
   }

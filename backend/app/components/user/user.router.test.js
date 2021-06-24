@@ -19,8 +19,7 @@ module.exports = (app, chai) => {
 
 // Sign up test
     describe('User API', () => {
-      it('Sign-up', (done) => {
-          User.remove({}) .then ( (resp) => {
+      it('Sign-up Test', (done) => {
             chai.request(app)
                 .post('/api/v1/users/sign-up')
                 .send(user)
@@ -28,10 +27,9 @@ module.exports = (app, chai) => {
                     res.should.have.status(200);
                     done();
                 });
-          });
         });
 // Successful Sign in Test
-        it('Sign-in', (done) => {
+        it('Successful Sign-in', (done) => {
           credentials.email = user.email;
           credentials.password = user.password;
             chai.request(app)
@@ -48,7 +46,7 @@ module.exports = (app, chai) => {
                 });
           });
 // invalid request Sign in Test
-        it('Sign-in', (done) => {
+        it('Invalid request Sign-in', (done) => {
           credentials.email = "forgotat.com";
           credentials.password = user.password;
             chai.request(app)
@@ -85,6 +83,9 @@ module.exports = (app, chai) => {
               });
 // Remove Workshop from user's preferred workshopService
             it('Remove from Preferred Workshops ', (done) => {
+            Workshop.findOne({}).then ( (res) => {
+                          testWorkshop = res;
+
                 chai.request(app)
                   .delete(`/api/v1/users/workshops/liked/${testWorkshop._id}`)
                   .set ('Authorization', `Bearer ${token}`)
@@ -92,7 +93,10 @@ module.exports = (app, chai) => {
                       res.should.have.status(200);
                       done();
                   });
+
+                  })
               });
+
       });
 
 };
