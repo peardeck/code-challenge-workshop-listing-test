@@ -11,6 +11,8 @@ exports.signUpHandler = async (req, resp) => {
   userObj.name = req.body.name || "";
   userObj.email = req.body.email;
   userObj.password = req.body.password;
+console.log("userobj.......");
+console.log(userObj);
 
   if ( userObj.name.length === 0 || !validator.isEmail(userObj.email) || userObj.password.length < 8 ) {
     resp.status(400).json({msg: "invalid request params"});
@@ -62,9 +64,9 @@ exports.getLikedHandler = async (req, resp) => {
   // TODO-code-challenge: Bonus: As a User, I can display the list of preferred workshops
     let idUser = req.token.id;
     winston.debug(`Get Liked list of workshops by user ${idUser}`);
-
-    if (await userService.getLikedWorkshops(idUser) ) {
-      resp.status(200).json();
+    let workshops = await userService.getLikedWorkshops(idUser)
+    if (workshops) {
+      resp.status(200).json(workshops);
     } else {
       resp.status(500).json();
     }

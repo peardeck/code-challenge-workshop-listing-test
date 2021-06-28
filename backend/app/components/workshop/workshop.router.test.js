@@ -7,6 +7,7 @@ module.exports = (app, chai) => {
       email: "bob@gmail.com",
       password: "passpass"
     };
+
     it('Get All Workshops sorted by distance', (done) => {
       chai.request(app)
           .post('/api/v1/users/sign-up')
@@ -20,7 +21,7 @@ module.exports = (app, chai) => {
                       if (!err && res.status === 200) {
                         chai.request(app)
                             .get('/api/v1/workshops/nearby')
-                            .set ('Authorization', `Bearer ${token}`)
+                            .set ('Authorization', `Bearer ${res.body.token}`)
                             .end((err, res) => {
                                 res.should.have.status(200);
                                 res.body.should.be.a('array');
@@ -32,8 +33,6 @@ module.exports = (app, chai) => {
               }
 
           });
-          done();
       });
-
   });
 };

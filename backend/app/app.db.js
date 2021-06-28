@@ -24,8 +24,8 @@ module.exports = async (db) => {
 const setupMongoDB = async (dbEnvConfig) => {
   const MONGO_DB_URL = `mongodb://${dbEnvConfig.DB_HOST}/${dbEnvConfig.DB_NAME}`;
   try {
-    await mongoose.connect(MONGO_DB_URL);
-    winston.info('Mongoose connected successfully to DB !');
+    await mongoose.connect(MONGO_DB_URL,  { useNewUrlParser: true ,  useUnifiedTopology: true });
+    winston.info(`Mongoose connected successfully to DB !: ${MONGO_DB_URL}`);
   } catch (err) {
     winston.error(`Mongoose failed to connect to : ${MONGO_DB_URL}`);
     winston.debug(err);

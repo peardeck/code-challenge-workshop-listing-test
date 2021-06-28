@@ -5,8 +5,8 @@ module.exports = {
       DB_NAME: "workshops_dev_db"
     },
     'test' : {
-      DB_HOST: "mongodb",
-      DB_NAME: "workshops_test_db"
+      DB_HOST: "localhost",
+      DB_NAME: "workshops_dev_db"
     },
     'prod' : {
       DB_HOST: "mongodb",

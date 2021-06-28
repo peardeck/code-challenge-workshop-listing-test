@@ -25,7 +25,7 @@ exports.add = async (userObj) => {
     await user.save();
     return true;
   } catch (err) {
-    winston.error('UserService: Error adding user');
+    console.log(err);
     return false;
   }
 };

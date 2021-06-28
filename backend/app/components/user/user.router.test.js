@@ -6,9 +6,9 @@ module.exports = (app, chai) => {
     const should = chai.should();
 
     const user = {
-      name: 'Hamza El Bouatmani',
+      name: 'Hamza',
       email: 'hamza@gmail.com',
-      password: 'passpass'
+      password: 'passpasspass'
     };
 
     let credentials = {};
@@ -19,6 +19,7 @@ module.exports = (app, chai) => {
 
 // Sign up test
     describe('User API', () => {
+
       it('Sign-up Test', (done) => {
             chai.request(app)
                 .post('/api/v1/users/sign-up')
@@ -57,6 +58,7 @@ module.exports = (app, chai) => {
                     done();
                 });
           });
+
 // Add a workshop to preferred
           it('Add Preferred Workshop ', (done) => {
             Workshop.findOne({}).then ( (res) => {
@@ -72,20 +74,22 @@ module.exports = (app, chai) => {
             });
 // Get User's preferred workshop
             it('Get Preferred Workshops ', (done) => {
+            console.log(token.id);
                 chai.request(app)
                     .get('/api/v1/users/workshops/liked')
                     .set ('Authorization', `Bearer ${token}`)
                     .end((err, res) => {
                         res.should.have.status(200);
-                        res.body.length.should.equal(1);
+                        res.body.length.should.equal(3);
                         done();
                     });
               });
+
 // Remove Workshop from user's preferred workshopService
             it('Remove from Preferred Workshops ', (done) => {
             Workshop.findOne({}).then ( (res) => {
                           testWorkshop = res;
-
+                          console.log(testWorkshop._id);
                 chai.request(app)
                   .delete(`/api/v1/users/workshops/liked/${testWorkshop._id}`)
                   .set ('Authorization', `Bearer ${token}`)
