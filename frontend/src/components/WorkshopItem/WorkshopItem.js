@@ -41,7 +41,7 @@ class WorkshopItem extends Component {
             <h2 className="title">{this.props.name}</h2>
           </div>
           <div className="middle">
-            <img className="workshop-img" src={this.props.img} alt="" />
+            <img className="workshop-img" src={this.props.picture} alt="" />
           </div>
           <div className="down">
             <div className={this.props.preferred ? "hidden": ""}>

@@ -26,13 +26,15 @@ exports.getNearby = async (id, longitude, latitude) => {
     // If coordinates are not specified just get the workshops as they are from the DB
     let workshops;
     if (longitude && latitude) {
-      workshops = await Workshop.find(
-        // TODO-code-challenge: Core Functionality: As a User, I can display the list of workshops sorted by distance
-        // Could sort here in the find function based on longitude and latitude
-        // See mongoose $near
-      ).exec();
+      workshops = await Workshop.find({
+        location: {
+          $near: {
+            $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }
+          },
+        },
+      })
     } else {
-      workshops = await Workshop.find();
+      workshops = await Workshop.find({});
     }
 
     // Get Special workshops ( liked & disliked )
