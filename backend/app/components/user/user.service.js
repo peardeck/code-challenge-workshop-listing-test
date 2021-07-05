@@ -53,6 +53,23 @@ exports.getDislikedWorkshops = async (id) => {
 
 exports.likeWorkshop = async (idUser, workshop) => {
   // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
+    winston.debug(
+      `User Service : liking workshop ${workshop.name} by user ${idUser}`
+    );
+
+    try{
+      let user = await User.findById(idUser);
+      let likedShop = { workshopId: workshop._id }
+      user.likedWorkshops.push(likedShop);
+      await user.save();
+      return true;
+    }catch(err){
+          winston.error(
+            `User Service: Error in liking workshop ${workshop.name} by user ${idUser}`
+          );
+          winston.debug(err);
+          return false;
+    }
 };
 
 exports.unlikeWorkshop = async (idUser, workshop) => {

@@ -47,13 +47,15 @@ exports.getNearby = async (id, longitude, latitude) => {
       for (let sp of specialWorkshops) {
         if (workshops[i]._id.toString() === sp.workshopId.toString()) {
           if (sp.likedTime) {
-            // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
+            //removes any likedWorkshops from the main page (Nearby Workshops Page)
+            workshops.splice(i, 1);
           } else if (sp.dislikedTime) {
             // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
           }
         }
       }
     }
+    
     return workshops;
   } catch (err) {
     winston.error('Workshop service Error: could not get nearby workshops');

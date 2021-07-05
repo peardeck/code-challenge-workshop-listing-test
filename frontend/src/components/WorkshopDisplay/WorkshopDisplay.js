@@ -130,7 +130,7 @@ class WorkshopDisplay extends Component {
           {this.state.sorted && (<p>Workshops Sorted</p>)}
         </div>
         <div>{this.state.data.map((workshop, i) => {
-          return <WorkshopItem key={i} {...workshop} />
+          return <WorkshopItem key={i} id={workshop._id} {...workshop} />
         })}</div>
       </div>
     );
