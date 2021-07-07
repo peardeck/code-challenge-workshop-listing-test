@@ -26,13 +26,15 @@ exports.getNearby = async (id, longitude, latitude) => {
     // If coordinates are not specified just get the workshops as they are from the DB
     let workshops;
     if (longitude && latitude) {
-      workshops = await Workshop.find(
-        // TODO-code-challenge: Core Functionality: As a User, I can display the list of workshops sorted by distance
-        // Could sort here in the find function based on longitude and latitude
-        // See mongoose $near
-      ).exec();
+      workshops = await Workshop.find({
+        location: {
+          $near: {
+            $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }
+          },
+        },
+      })
     } else {
-      workshops = await Workshop.find();
+      workshops = await Workshop.find({});
     }
 
     // Get Special workshops ( liked & disliked )
@@ -45,13 +47,15 @@ exports.getNearby = async (id, longitude, latitude) => {
       for (let sp of specialWorkshops) {
         if (workshops[i]._id.toString() === sp.workshopId.toString()) {
           if (sp.likedTime) {
-            // TODO-code-challenge: Secondary Functionality: As a User, I can like a workshop, so it can be added to my preferred workshops
+            //removes any likedWorkshops from the main page (Nearby Workshops Page)
+            workshops.splice(i, 1);
           } else if (sp.dislikedTime) {
             // TODO-code-challenge: Bonus: As a User, I can dislike a workshop, so it won’t be displayed within “Nearby WorkShops” list during the next 2 hours
           }
         }
       }
     }
+    
     return workshops;
   } catch (err) {
     winston.error('Workshop service Error: could not get nearby workshops');

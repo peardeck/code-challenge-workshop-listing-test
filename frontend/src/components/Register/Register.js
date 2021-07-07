@@ -9,26 +9,38 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: ""
+      error: "",
+      name: "",
+      email: "",
+      password: ""
     };
     this.submitHandler = this.submitHandler.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
   }
 
+  handleChange(event){
+    let value = event.target.value;
+    this.setState({
+      ...this.state,
+      [event.target.name]: value
+    })
+  }
+
   submitHandler(ev) {
+    const { name, email, password } = this.state;
+    console.log(this.state);
     ev.preventDefault();
     console.log('Submitting form ...');
 
-    // @TODO-code-challenge: Core Functionality: As a User, I can sign up using my email & password
-    // Update fields based on user input
-    let name = "";
-    let email = "";
-    let password = "";
-
     if (password.length < 8) {
-      this.passwordInput.value = "";
+      this.setState({
+        ...this.state,
+        password: "",
+        error: "Password not long enough. Please try again."
+      })
       this.passwordInput.focus();
       return;
     }
@@ -58,7 +70,6 @@ class Register extends Component {
       }
     } )
     .catch ( (err) => { console.error('Error fetching ...'); } );
-
   }
 
   render() {
@@ -66,29 +77,50 @@ class Register extends Component {
       <div className="Register">
         <h1>Register</h1>
         <form onSubmit={this.submitHandler}>
-            {/* // @TODO-code-challenge: Core Functionality: As a User, I can sign up using my email & password */}
-            <div className="field">
-              <label htmlFor="name">Names: </label>
-              <input type="text" name="name" required placeholder="name"/>
-            </div>
-            <div className="field">
-              <label htmlFor="email">E-mail: </label>
-              <input type="email" name="email" required placeholder="valid e-mail"/>
-            </div>
-            <div className="field">
-              <label htmlFor="password">Password: </label>
-              <input type="password" name="password" required placeholder="( at lease 8 characters )"/>
-            </div>
-            <div className="field">
-              <button type="submit">Sign-up</button>
-            </div>
+          <div className="field">
+            <label htmlFor="name">Names: </label>
+            <input
+              type="text"
+              name="name"
+              required
+              placeholder="name"
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="email">E-mail: </label>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="valid e-mail"
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="password">Password: </label>
+            <input
+              ref={(input) => {
+                this.passwordInput = input;
+              }}
+              type="password"
+              name="password"
+              required
+              placeholder="( at lease 8 characters )"
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="field">
+            <button type="submit">Sign-up</button>
+          </div>
         </form>
-        <div className={`error-msg ${this.state.error === "" ? 'hidden' : ''}`}>
+        <div className={`error-msg ${this.state.error === "" ? "hidden" : ""}`}>
           <p>{this.state.error}</p>
         </div>
-      {localStorage.getItem('token') ? <Redirect from="/signup" to="/workshops/nearby" /> : null}
+        {localStorage.getItem("token") ? (
+          <Redirect from="/signup" to="/workshops/nearby" />
+        ) : null}
       </div>
-
     );
   }
 }
